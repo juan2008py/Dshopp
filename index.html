@@ -23,6 +23,7 @@
             background: var(--bg-primary); 
             color: var(--text-main);
             padding: 24px 16px; 
+            -webkit-font-smoothing: antialiased;
         }
 
         .container { max-width: 1100px; margin: 0 auto; }
@@ -36,8 +37,8 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        .brand-info h1 { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; }
-        .brand-info p { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .brand-info h1 { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: -0.5px; }
+        .brand-info p { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
 
         #img_logo {
             width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color);
@@ -49,13 +50,13 @@
         .about-card h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
         .about-card p { font-size: 0.92rem; color: #495057; line-height: 1.5; }
 
-        .section-title { text-align: center; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; margin-bottom: 24px; }
+        .section-title { text-align: center; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 24px; }
         
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 28px 16px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 24px 16px; }
 
         .card { 
             background: var(--bg-primary); border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color);
-            display: flex; flex-direction: column; transition: transform 0.2s ease;
+            display: flex; flex-direction: column; transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
         
@@ -63,24 +64,33 @@
 
         .card-content { padding: 14px; display: flex; flex-direction: column; flex-grow: 1; }
         
-        .category { font-size: 0.68rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 4px; }
-        .card h3 { font-size: 0.95rem; font-weight: 600; margin: 0 0 10px; }
+        .category { font-size: 0.68rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .card h3 { font-size: 0.95rem; font-weight: 600; margin: 0 0 10px; line-height: 1.3; }
         
         .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; margin-bottom: 12px; }
         .price { color: var(--text-main); font-weight: 700; font-size: 1.05rem; }
 
-        .status { font-size: 0.65rem; padding: 3px 8px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
+        .status { font-size: 0.65rem; padding: 3px 8px; border-radius: 4px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
         .status.disponible, .status.entregado { background: #e8f8f5; color: #27ae60; }
         .status.pendiente { background: #fff9e6; color: #f39c12; }
+        .status.fuera_de_stock { background: #fde8e8; color: #e74c3c; }
 
         .btn-whatsapp {
             display: flex; align-items: center; justify-content: center; gap: 6px;
             background: var(--accent-green); color: #ffffff; text-decoration: none;
             font-size: 0.82rem; font-weight: 700; padding: 8px 12px; border-radius: 6px; text-align: center;
+            transition: background 0.2s ease;
         }
         .btn-whatsapp:hover { background: var(--accent-green-hover); }
         
-        .loading { text-align: center; color: var(--text-muted); margin-top: 40px; grid-column: 1 / -1; }
+        .loading { text-align: center; color: var(--text-muted); margin-top: 40px; grid-column: 1 / -1; font-size: 1rem; }
+
+        @media (max-width: 480px) {
+            .grid { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 16px 12px; }
+            .card-content { padding: 10px; }
+            .card h3 { font-size: 0.88rem; }
+            .price { font-size: 0.95rem; }
+        }
     </style>
 </head>
 <body>
@@ -107,28 +117,27 @@
     </div>
 
     <script>
-        // Tu URL CSV pública de Google Sheets
         const URL_DATOS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRstuG3-mPUfpGALGmtisWN-nbTcV9qnEO0elsNKrTgusWs7BKkfmxsUFOMmrewBCP7ma0IefjTgUsj/pub?gid=0&single=true&output=csv";
-        const NUMERO_WHATSAPP = "595993 349576"; // Reemplaza con tu número real de WhatsApp
+        // Número sin espacios
+        const NUMERO_WHATSAPP = "595993349576";
 
         async function cargarCatalogo() {
             try {
-                const response = await fetch(URL_DATOS);
+                // Añadimos timestamp a la petición para saltar la caché del navegador
+                const response = await fetch(URL_DATOS + "&t=" + new Date().getTime());
                 const dataText = await response.text();
                 const lineas = dataText.split("\n");
                 const contenedor = document.getElementById("catalogo");
-                contenedor.innerHTML = "";
 
-                // Obtenemos los encabezados de la Fila 1 para identificar las columnas por su nombre exacto
                 const encabezados = lineas[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(h => h.replace(/"/g, '').trim());
                 
+                let HTMLFinal = "";
                 let contador = 0;
 
                 for (let i = 1; i < lineas.length; i++) {
                     const fila = lineas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     
                     if (fila.length > 1 && fila[1] && fila[1].trim() !== "") {
-                        // Mapeamos los datos usando los nombres de las columnas de Google Sheets para evitar errores de posición
                         let item = {};
                         encabezados.forEach((header, index) => {
                             item[header] = fila[index] ? fila[index].replace(/"/g, '').trim() : "";
@@ -136,39 +145,39 @@
 
                         const producto = item["Producto"] || "Sin nombre";
                         const categoria = item["Categoría"] || "General";
-                        // Usamos la columna "imagen URL" que genera AppSheet para que sea visible en la web
                         const imagen = item["imagen URL"] || item["imágen"] || "";
                         const precio = item["Precio De Venta"] || "Consultar";
                         const estado = item["Estado"] || "Disponible";
 
                         contador++;
-                        const estadoClase = estado.toLowerCase();
+                        const estadoClase = estado.toLowerCase().replace(/\s+/g, '_');
                         
                         const mensajeWp = encodeURIComponent(`Hola Denis, me interesa consultar por el producto "${producto}" (${categoria}) con precio ${precio}.`);
                         const linkWp = `https://wa.me/${NUMERO_WHATSAPP}?text=${mensajeWp}`;
 
-                        const card = document.createElement("div");
-                        card.className = "card";
-                        card.innerHTML = `
-                            <img src="${imagen}" alt="${producto}" onerror="this.src='https://via.placeholder.com/200?text=Sin+Imagen'">
-                            <div class="card-content">
-                                <span class="category">${categoria}</span>
-                                <h3>${producto}</h3>
-                                <div class="price-row">
-                                    <span class="price">${precio}</span>
-                                    <span class="status ${estadoClase}">${estado}</span>
+                        HTMLFinal += `
+                            <div class="card">
+                                <img src="${imagen}" alt="${producto}" onerror="this.src='https://via.placeholder.com/200?text=Sin+Imagen'">
+                                <div class="card-content">
+                                    <span class="category">${categoria}</span>
+                                    <h3>${producto}</h3>
+                                    <div class="price-row">
+                                        <span class="price">${precio}</span>
+                                        <span class="status ${estadoClase}">${estado}</span>
+                                    </div>
+                                    <a href="${linkWp}" target="_blank" class="btn-whatsapp">
+                                        Pedir por WhatsApp
+                                    </a>
                                 </div>
-                                <a href="${linkWp}" target="_blank" class="btn-whatsapp">
-                                    Pedir por WhatsApp
-                                </a>
                             </div>
                         `;
-                        contenedor.appendChild(card);
                     }
                 }
 
                 if (contador === 0) {
-                    contenedor.innerHTML = "<p class='loading'>No hay productos disponibles para mostrar por el momento.</p>";
+                    contenedor.innerHTML = "<p class='loading'>No hay productos disponibles por el momento.</p>";
+                } else {
+                    contenedor.innerHTML = HTMLFinal;
                 }
 
             } catch (error) {
@@ -177,10 +186,8 @@
             }
         }
 
-        setInterval(() => {
-        cargarCatalogo() 
-        }, 5000);
-        
+        // Carga inicial al entrar a la página
+        cargarCatalogo();
     </script>
 </body>
 </html>
