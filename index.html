@@ -124,7 +124,6 @@
             try {
                 const response = await fetch(URL_DATOS + "&t=" + new Date().getTime());
                 const dataText = await response.text();
-                // Limpiamos retornos de carro (\r) para evitar desacoples en cadenas de texto
                 const lineas = dataText.replace(/\r/g, "").split("\n");
                 const contenedor = document.getElementById("catalogo");
 
@@ -133,7 +132,6 @@
                     return;
                 }
 
-                // Normalización de encabezados
                 const encabezados = lineas[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(h => h.replace(/"/g, '').trim());
                 
                 let HTMLFinal = "";
@@ -144,18 +142,22 @@
 
                     const fila = lineas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     
-                    if (fila.length >= 2 && fila[1] && fila[1].trim() !== "") {
+                    if (fila.length >= 2) {
                         let item = {};
                         encabezados.forEach((header, index) => {
                             item[header] = fila[index] ? fila[index].replace(/"/g, '').trim() : "";
                         });
 
-                        // Búsqueda flexible por nombre de columna o índice directo si falla la llave
-                        const producto = item["Producto"] || (fila[1] ? fila[1].replace(/"/g, '').trim() : "Sin nombre");
-                        const categoria = item["Categoría"] || (fila[2] ? fila[2].replace(/"/g, '').trim() : "General");
-                        const imagen = item["imagen URL"] || (fila[5] ? fila[5].replace(/"/g, '').trim() : "");
-                        const precio = item["Precio De Venta"] || (fila[9] ? fila[9].replace(/"/g, '').trim() : "Consultar");
-                        const estado = item["Estado"] || (fila[13] ? fila[13].replace(/"/g, '').trim() : "Disponible");
+                        // Filtro estricto: solo procesar filas que posean un ID válido (que empiece con 'Prod')
+                        const idProd = item["ID"] || "";
+                        if (!idProd.toLowerCase().includes("prod")) continue;
+
+                        const producto = item["Producto"] || "Sin nombre";
+                        const categoria = item["Categoría"] || "General";
+                        // Lee de forma inteligente la URL pública de AppSheet o el respaldo local
+                        const imagen = item["imagen URL"] || item["imágen"] || "";
+                        const precio = item["Precio De Venta"] || "Consultar";
+                        const estado = item["Estado"] || "Disponible";
 
                         contador++;
                         const estadoClase = estado.toLowerCase().replace(/\s+/g, '_');
