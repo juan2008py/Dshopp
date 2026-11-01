@@ -153,7 +153,7 @@
                         // Búsqueda flexible por nombre de columna o índice directo si falla la llave
                         const producto = item["Producto"] || (fila[1] ? fila[1].replace(/"/g, '').trim() : "Sin nombre");
                         const categoria = item["Categoría"] || (fila[2] ? fila[2].replace(/"/g, '').trim() : "General");
-                        const imagen = item["imagen URL"] || item["imágen"] || (fila[4] ? fila[4].replace(/"/g, '').trim() : "");
+                        const imagen = item["imagen URL"] || (fila[5] ? fila[5].replace(/"/g, '').trim() : "");
                         const precio = item["Precio De Venta"] || (fila[9] ? fila[9].replace(/"/g, '').trim() : "Consultar");
                         const estado = item["Estado"] || (fila[13] ? fila[13].replace(/"/g, '').trim() : "Disponible");
 
