@@ -1,207 +1,274 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIDESX - Tienda de Ropa , Calzados y Accesorios</title>
-    <style>
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --text-main: #111111;
-            --text-muted: #6c757d;
-            --accent-green: #25d366;
-            --accent-green-hover: #1ebe5d;
-            --border-color: #e9ecef;
-            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIDESX - Tienda de ropa, calzados y accesorios</title>
+<meta name="description" content="NIDESX: tienda de ropa, calzados y accesorios con calidad y precios pensados para ti. Mira el catálogo y consulta por WhatsApp.">
+<link rel="canonical" href="https://dshopp.vercel.app/">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" type="image/jpeg" href="NidesX.jpg">
+<link rel="apple-touch-icon" href="NidesX.jpg">
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+<!-- Vista previa al compartir (WhatsApp, Facebook, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_PY">
+<meta property="og:site_name" content="NIDESX">
+<meta property="og:title" content="NIDESX - Tienda de ropa, calzados y accesorios">
+<meta property="og:description" content="Mira el catálogo de NIDESX y consulta por WhatsApp.">
+<meta property="og:url" content="https://dshopp.vercel.app/">
+<meta property="og:image" content="https://dshopp.vercel.app/NidesX.jpg">
+<meta name="twitter:card" content="summary">
 
-        body { 
-            font-family: var(--font-family); 
-            background: var(--bg-primary); 
-            color: var(--text-main);
-            padding: 24px 16px; 
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .container { max-width: 1100px; margin: 0 auto; }
-
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .brand-info h1 { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: -0.5px; }
-        .brand-info p { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
-
-        #img_logo {
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-  border-radius: 50%;
-  border: 2px solid #e9ecef;
-  background: #fff;
+<!-- Datos estructurados para Google -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ClothingStore",
+  "name": "NIDESX",
+  "description": "Tienda de ropa, calzados y accesorios con calidad y precios adaptados a cada cliente.",
+  "url": "https://dshopp.vercel.app/",
+  "image": "https://dshopp.vercel.app/NidesX.jpg",
+  "logo": "https://dshopp.vercel.app/NidesX.jpg",
+  "telephone": "+595993349576"
 }
+</script>
 
-        .about-card {
-            background: var(--bg-secondary); padding: 18px 20px; border-radius: 12px; margin-bottom: 32px;
-        }
-        .about-card h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
-        .about-card p { font-size: 0.92rem; color: #495057; line-height: 1.5; }
+<!-- Analítica de Vercel (sin cookies). Actívala en el panel de Vercel: proyecto > Analytics -->
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 
-        .section-title { text-align: center; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 24px; }
-        
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 24px 16px; }
-
-        .card { 
-            background: var(--bg-primary); border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color);
-            display: flex; flex-direction: column; transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
-        
-        .card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background: var(--bg-secondary); }
-
-        .card-content { padding: 14px; display: flex; flex-direction: column; flex-grow: 1; }
-        
-        .category { font-size: 0.68rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
-        .card h3 { font-size: 0.95rem; font-weight: 600; margin: 0 0 10px; line-height: 1.3; }
-        
-        .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; margin-bottom: 12px; }
-        .price { color: var(--text-main); font-weight: 700; font-size: 1.05rem; }
-
-        .status { font-size: 0.65rem; padding: 3px 8px; border-radius: 4px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
-        .status.disponible, .status.entregado { background: #e8f8f5; color: #27ae60; }
-        .status.pendiente { background: #fff9e6; color: #f39c12; }
-        .status.fuera_de_stock { background: #fde8e8; color: #e74c3c; }
-
-        .btn-whatsapp {
-            display: flex; align-items: center; justify-content: center; gap: 6px;
-            background: var(--accent-green); color: #ffffff; text-decoration: none;
-            font-size: 0.82rem; font-weight: 700; padding: 8px 12px; border-radius: 6px; text-align: center;
-            transition: background 0.2s ease;
-        }
-        .btn-whatsapp:hover { background: var(--accent-green-hover); }
-        
-        .loading { text-align: center; color: var(--text-muted); margin-top: 40px; grid-column: 1 / -1; font-size: 1rem; }
-
-        @media (max-width: 480px) {
-            .grid { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 16px 12px; }
-            .card-content { padding: 10px; }
-            .card h3 { font-size: 0.88rem; }
-            .price { font-size: 0.95rem; }
-        }
-    </style>
+<style>
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --text-main: #111111;
+  --text-muted: #5c636a;
+  --accent-green: #0a7d3b;
+  --accent-green-hover: #086530;
+  --border-color: #e9ecef;
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background: var(--bg-primary);
+  color: var(--text-main);
+  padding: 24px 16px 96px;
+  -webkit-font-smoothing: antialiased;
+}
+a:focus-visible { outline: 3px solid #111111; outline-offset: 2px; }
+.container { max-width: 1100px; margin: 0 auto; }
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);
+}
+.brand-info h1 { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: -0.5px; }
+.brand-info p { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+#img_logo {
+  width: 64px; height: 64px; object-fit: contain; border-radius: 50%;
+  border: 2px solid #e9ecef; background: #fff;
+}
+.about-card { background: var(--bg-secondary); padding: 18px 20px; border-radius: 12px; margin-bottom: 32px; }
+.about-card h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+.about-card p { font-size: 0.92rem; color: #495057; line-height: 1.5; }
+.section-title { text-align: center; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 24px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 24px 16px; }
+.card {
+  background: var(--bg-primary); border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color);
+  display: flex; flex-direction: column; transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+.card img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; background: var(--bg-secondary); display: block; }
+.card-content { padding: 14px; display: flex; flex-direction: column; flex-grow: 1; }
+.category { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
+.card h3 { font-size: 0.95rem; font-weight: 600; margin: 0 0 10px; line-height: 1.3; }
+.price-row { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-top: auto; margin-bottom: 12px; }
+.price { color: var(--text-main); font-weight: 700; font-size: 1.05rem; }
+.status { font-size: 0.68rem; padding: 3px 8px; border-radius: 4px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
+.status.disponible, .status.entregado { background: #e8f8f5; color: #146c43; }
+.status.pendiente { background: #fff9e6; color: #8a5a00; }
+.status.fuera_de_stock { background: #fde8e8; color: #b3261e; }
+.btn-whatsapp {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  background: var(--accent-green); color: #ffffff; text-decoration: none;
+  font-size: 0.85rem; font-weight: 700; padding: 10px 12px; border-radius: 6px; text-align: center;
+  transition: background 0.2s ease;
+}
+.btn-whatsapp:hover { background: var(--accent-green-hover); }
+.loading { text-align: center; color: var(--text-muted); margin-top: 40px; grid-column: 1 / -1; font-size: 1rem; }
+.loading.error { color: #b3261e; }
+.wa-float {
+  position: fixed; right: 16px; bottom: 16px; z-index: 10;
+  background: var(--accent-green); color: #ffffff; text-decoration: none;
+  font-size: 0.9rem; font-weight: 700; padding: 12px 18px; border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+.wa-float:hover { background: var(--accent-green-hover); }
+footer { max-width: 1100px; margin: 40px auto 0; padding-top: 16px; border-top: 1px solid var(--border-color); text-align: center; font-size: 0.85rem; color: var(--text-muted); }
+footer a { color: var(--text-muted); margin: 0 8px; }
+footer p { margin-top: 8px; }
+@media (max-width: 480px) {
+  .grid { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 16px 12px; }
+  .card-content { padding: 10px; }
+  .card h3 { font-size: 0.88rem; }
+  .price { font-size: 0.95rem; }
+}
+</style>
 </head>
 <body>
-
-    <div class="container">
-        <header>
-            <div class="brand-info">
-                <h1>NIDESX</h1>
-                <p>Ropas , Calzados y Accesorios</p>
-            </div>
-            <img id="img_logo" src="NidesX.jpg" alt="Logo Dshopp" />
-        </header>
-
-        <section class="about-card">
-            <h2>¿Qué es NIDESX?</h2>
-            <p>¡Hola! Soy Denis. Te presento <strong>NIDESX</strong>, una tienda de prendas y accesorios pensados para cada ocasión, combinando calidad y precios adaptados a ti.</p>
-        </section>
-
-        <h2 class="section-title">Productos Disponibles</h2>
-
-        <div id="catalogo" class="grid">
-            <div class="loading">Cargando catálogo...</div>
-        </div>
+<div class="container">
+  <header>
+    <div class="brand-info">
+      <h1>NIDESX</h1>
+      <p>Ropa, calzados y accesorios</p>
     </div>
+    <img id="img_logo" src="NidesX.jpg" alt="Logo de NIDESX" width="64" height="64">
+  </header>
 
-    <script>
-        const URL_DATOS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRstuG3-mPUfpGALGmtisWN-nbTcV9qnEO0elsNKrTgusWs7BKkfmxsUFOMmrewBCP7ma0IefjTgUsj/pub?output=csv";
-        const NUMERO_WHATSAPP = "595993349576";
+  <main>
+    <section class="about-card">
+      <h2>¿Qué es NIDESX?</h2>
+      <p>¡Hola! Soy Denis. Te presento <strong>NIDESX</strong>, una tienda de prendas y accesorios pensados para cada ocasión, combinando calidad y precios adaptados a ti.</p>
+    </section>
 
-        async function cargarCatalogo() {
-            try {
-                const response = await fetch(URL_DATOS + "&t=" + new Date().getTime());
-                const dataText = await response.text();
-                const lineas = dataText.replace(/\r/g, "").split("\n");
-                const contenedor = document.getElementById("catalogo");
+    <h2 class="section-title">Productos disponibles</h2>
+    <div id="catalogo" class="grid" aria-live="polite">
+      <div class="loading">Cargando catálogo...</div>
+    </div>
+    <noscript><p class="loading">Para ver el catálogo necesitas activar JavaScript.</p></noscript>
+  </main>
+</div>
 
-                if (lineas.length < 2) {
-                    contenedor.innerHTML = "<p class='loading'>No se encontraron datos en el catálogo.</p>";
-                    return;
-                }
+<footer>
+  <nav aria-label="Información legal">
+    <a href="aviso-legal.html">Aviso legal</a>
+    <a href="privacidad.html">Privacidad</a>
+    <a href="privacidad.html#cookies">Cookies</a>
+  </nav>
+  <p>&copy; 2026 NIDESX</p>
+</footer>
 
-                const encabezados = lineas[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(h => h.replace(/"/g, '').trim());
-                
-                let HTMLFinal = "";
-                let contador = 0;
+<a id="wa-general" class="wa-float" href="#" target="_blank" rel="noopener noreferrer" aria-label="Escribir a NIDESX por WhatsApp">Consultar por WhatsApp</a>
 
-                for (let i = 1; i < lineas.length; i++) {
-                    if (!lineas[i].trim()) continue;
+<script>
+const URL_DATOS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRstuG3-mPUfpGALGmtisWN-nbTcV9qnEO0elsNKrTgusWs7BKkfmxsUFOMmrewBCP7ma0IefjTgUsj/pub?output=csv";
+const NUMERO_WHATSAPP = "595993349576";
+const PLACEHOLDER = "data:image/svg+xml;utf8," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><rect width="100%" height="100%" fill="#f1f3f5"/>' +
+  '<text x="50%" y="50%" fill="#5c636a" font-family="Arial" font-size="22" text-anchor="middle" dominant-baseline="middle">Sin imagen</text></svg>'
+);
 
-                    const fila = lineas[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    
-                    if (fila.length >= 2) {
-                        let item = {};
-                        encabezados.forEach((header, index) => {
-                            item[header] = fila[index] ? fila[index].replace(/"/g, '').trim() : "";
-                        });
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, function (ch) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+  });
+}
 
-                        // Filtro estricto: solo procesar filas que posean un ID válido (que empiece con 'Prod')
-                        const idProd = item["ID"] || "";
-                        if (!idProd.toLowerCase().includes("prod")) continue;
+function parseCSV(text) {
+  const rows = [];
+  let row = [], cell = "", inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { cell += '"'; i++; }
+        else { inQuotes = false; }
+      } else { cell += c; }
+    } else if (c === '"') {
+      inQuotes = true;
+    } else if (c === ",") {
+      row.push(cell); cell = "";
+    } else if (c === "\n" || c === "\r") {
+      if (c === "\r" && text[i + 1] === "\n") i++;
+      row.push(cell); cell = "";
+      rows.push(row); row = [];
+    } else {
+      cell += c;
+    }
+  }
+  if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
 
-                        const producto = item["Producto"] || "Sin nombre";
-                        const categoria = item["Categoría"] || "General";
-                        // Lee de forma inteligente la URL pública de AppSheet o el respaldo local
-                        const imagen = item["imagen URL"] || item["imágen"] || "";
-                        const precio = item["Precio De Venta"] || "Consultar";
-                        const estado = item["Estado"] || "Disponible";
+function enlaceWhatsApp(mensaje) {
+  return "https://wa.me/" + NUMERO_WHATSAPP + "?text=" + encodeURIComponent(mensaje);
+}
 
-                        contador++;
-                        const estadoClase = estado.toLowerCase().replace(/\s+/g, '_');
-                        
-                        const mensajeWp = encodeURIComponent(`Hola Denis, me interesa consultar por el producto "${producto}" (${categoria}) con precio ${precio}.`);
-                        const linkWp = `https://wa.me/${NUMERO_WHATSAPP}?text=${mensajeWp}`;
+async function cargarCatalogo() {
+  const contenedor = document.getElementById("catalogo");
+  try {
+    const response = await fetch(URL_DATOS);
+    if (!response.ok) throw new Error("HTTP " + response.status);
+    const texto = (await response.text()).replace(/^\uFEFF/, "");
+    const filas = parseCSV(texto).filter(function (f) {
+      return f.some(function (c) { return c.trim() !== ""; });
+    });
 
-                        HTMLFinal += `
-                            <div class="card">
-                                <img src="${imagen}" alt="${producto}" onerror="this.src='https://via.placeholder.com/200?text=Sin+Imagen'">
-                                <div class="card-content">
-                                    <span class="category">${categoria}</span>
-                                    <h3>${producto}</h3>
-                                    <div class="price-row">
-                                        <span class="price">${precio}</span>
-                                        <span class="status ${estadoClase}">${estado}</span>
-                                    </div>
-                                    <a href="${linkWp}" target="_blank" class="btn-whatsapp">
-                                        Pedir por WhatsApp
-                                    </a>
-                                </div>
-                            </div>
-                        `;
-                    }
-                }
+    if (filas.length < 2) {
+      contenedor.innerHTML = "<p class='loading'>No se encontraron datos en el catálogo.</p>";
+      return;
+    }
 
-                if (contador === 0) {
-                    contenedor.innerHTML = "<p class='loading'>No hay productos disponibles por el momento.</p>";
-                } else {
-                    contenedor.innerHTML = HTMLFinal;
-                }
+    const encabezados = filas[0].map(function (h) { return h.trim(); });
+    let html = "";
+    let contador = 0;
 
-            } catch (error) {
-                document.getElementById("catalogo").innerHTML = "<p class='loading' style='color:red;'>Error al conectar con el catálogo de Dshopp.</p>";
-                console.error("Detalle del error:", error);
-            }
-        }
+    for (let i = 1; i < filas.length; i++) {
+      const item = {};
+      encabezados.forEach(function (h, idx) { item[h] = (filas[i][idx] || "").trim(); });
 
-        cargarCatalogo();
-    </script>
+      // Solo filas con un ID válido (que contenga 'prod')
+      if (!(item["ID"] || "").toLowerCase().includes("prod")) continue;
+
+      const producto = item["Producto"] || "Sin nombre";
+      const categoria = item["Categoría"] || "General";
+      let imagen = item["imagen URL"] || item["imágen"] || "";
+      if (!/^https?:\/\//i.test(imagen)) imagen = PLACEHOLDER;
+      const precio = item["Precio De Venta"] || "Consultar";
+      const estado = item["Estado"] || "Disponible";
+      const estadoClase = estado.toLowerCase().replace(/\s+/g, "_").replace(/[^a-z_]/g, "");
+      const linkWp = enlaceWhatsApp('Hola Denis, me interesa consultar por el producto "' + producto + '" (' + categoria + ') con precio ' + precio + '.');
+
+      contador++;
+      html +=
+        '<div class="card">' +
+          '<img src="' + esc(imagen) + '" alt="' + esc(producto) + '" width="400" height="400" loading="lazy" decoding="async">' +
+          '<div class="card-content">' +
+            '<span class="category">' + esc(categoria) + '</span>' +
+            '<h3>' + esc(producto) + '</h3>' +
+            '<div class="price-row">' +
+              '<span class="price">' + esc(precio) + '</span>' +
+              '<span class="status ' + estadoClase + '">' + esc(estado) + '</span>' +
+            '</div>' +
+            '<a href="' + esc(linkWp) + '" target="_blank" rel="noopener noreferrer" class="btn-whatsapp">Pedir por WhatsApp</a>' +
+          '</div>' +
+        '</div>';
+    }
+
+    contenedor.innerHTML = contador === 0
+      ? "<p class='loading'>No hay productos disponibles por el momento.</p>"
+      : html;
+  } catch (error) {
+    contenedor.innerHTML = "<p class='loading error'>No pudimos cargar el catálogo. Revisa tu conexión e inténtalo de nuevo.</p>";
+    console.error("Detalle del error:", error);
+  }
+}
+
+// Si una imagen falla, mostrar una imagen alternativa incrustada
+document.getElementById("catalogo").addEventListener("error", function (e) {
+  if (e.target.tagName === "IMG" && !e.target.dataset.fallback) {
+    e.target.dataset.fallback = "1";
+    e.target.src = PLACEHOLDER;
+  }
+}, true);
+
+document.getElementById("wa-general").href = enlaceWhatsApp("Hola Denis, quisiera consultar por tus productos.");
+
+cargarCatalogo();
+</script>
 </body>
-</html>
+    </html>
+    
