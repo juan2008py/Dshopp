@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dshopp.vercel.app/sitemap.xml
